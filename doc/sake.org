@@ -62,11 +62,11 @@ Sake is a make like programming library for gambit-c users
     #+END_SRC
    run the task, and the dependant tasks before if needed
 ** Files
-*** fileset                                                        :function:                                                :macro:
+*** fileset                                                        :function:
     #+BEGIN_SRC scheme 
     (fileset dir: <dir>
-             test: <test>
-             recur: <bool>)
+    test: <test>
+    recur: <bool>)
     #+END_SRC
     creates a list containing the names of the files present in directory dir.
     the optional test: keyword let's you express a test function to which the
