@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="en" xml:lang="en">
+<head>
+<title>Sake</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2011-12-26 18:44:36 CET"/>
+<meta name="author" content="francesco bracchi"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+
+<h1 class="title">Sake</h1>
+
+<p>Sake is a make like programming library for gambit-c users
+</p>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Download </a></li>
+<li><a href="#sec-2">2 Install </a></li>
+<li><a href="#sec-3">3 Use </a></li>
+<li><a href="#sec-4">4 Sakefile language </a>
+<ul>
+<li><a href="#sec-4.1">4.1 Parameters </a>
+<ul>
+<li><a href="#sec-4.1.1">4.1.1 current-build-directory</a></li>
+<li><a href="#sec-4.1.2">4.1.2 current-source-directory</a></li>
+<li><a href="#sec-4.1.3">4.1.3 current-project-name</a></li>
+<li><a href="#sec-4.1.4">4.1.4 current-module-name</a></li>
+</ul>
+</li>
+<li><a href="#sec-4.2">4.2 Tasks </a>
+<ul>
+<li><a href="#sec-4.2.1">4.2.1 task</a></li>
+<li><a href="#sec-4.2.2">4.2.2 define-task</a></li>
+<li><a href="#sec-4.2.3">4.2.3 task-run</a></li>
+</ul>
+</li>
+<li><a href="#sec-4.3">4.3 Files </a>
+<ul>
+<li><a href="#sec-4.3.1">4.3.1 fileset&nbsp;&nbsp;&nbsp;<span class="tag"> function</span></a></li>
+<li><a href="#sec-4.3.2">4.3.2 make-directory</a></li>
+<li><a href="#sec-4.3.3">4.3.3 delete-files</a></li>
+<li><a href="#sec-4.3.4">4.3.4 copy-files</a></li>
+<li><a href="#sec-4.3.5">4.3.5 append-files</a></li>
+</ul>
+</li>
+<li><a href="#sec-4.4">4.4 Compile </a>
+<ul>
+<li><a href="#sec-4.4.1">4.4.1 compile-files-to-c</a></li>
+<li><a href="#sec-4.4.2">4.4.2 link-files</a></li>
+<li><a href="#sec-4.4.3">4.4.3 compile-files</a></li>
+<li><a href="#sec-4.4.4">4.4.4 include-files</a></li>
+</ul>
+</li>
+<li><a href="#sec-4.5">4.5 Example </a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Download </h2>
+<div class="outline-text-2" id="text-1">
+
+<p>TBD
+</p></div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Install </h2>
+<div class="outline-text-2" id="text-2">
+
+<p>TBD
+</p></div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Use </h2>
+<div class="outline-text-2" id="text-3">
+
+<p>Usage: 
+</p>
+
+
+<pre class="src src-bash">sake [-h] [-file &lt;sake-file&gt;] [initial-task]
+</pre>
+
+
+
+<ul>
+<li>
+-h: help page
+</li>
+<li>
+-f &lt;sake-file&gt;: assign the sakefile to load (defaults to sakefile.scm)
+</li>
+<li>
+&lt;initial-task&gt; the task that have to be run (defaults to build)
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Sakefile language </h2>
+<div class="outline-text-2" id="text-4">
+
+
+</div>
+
+<div id="outline-container-4.1" class="outline-3">
+<h3 id="sec-4.1"><span class="section-number-3">4.1</span> Parameters </h3>
+<div class="outline-text-3" id="text-4.1">
+
+
+</div>
+
+<div id="outline-container-4.1.1" class="outline-4">
+<h4 id="sec-4.1.1"><span class="section-number-4">4.1.1</span> current-build-directory &nbsp;&nbsp;&nbsp;<span class="tag"><span class="parameter">parameter</span></span></h4>
+<div class="outline-text-4" id="text-4.1.1">
+
+
+
+
+<pre class="src src-scheme">(current-build-directory)           <span style="color: #465a61; font-weight: bold;">; </span><span style="color: #465a61; font-style: italic;">get parameter value
+</span>(current-build-directory <span style="color: #a57705;">&lt;newval&gt;</span>)  <span style="color: #465a61; font-weight: bold;">; </span><span style="color: #465a61; font-style: italic;">set parameter
+</span></pre>
+
+
+
+<p>
+defaults to $PWD/build (i.e. if run in directory foo/bar it will be 
+foo/bar/build defines the default directory where compiled files will be 
+put. (can be used with parameterize, see gambit-c parameters
+</p></div>
+
+</div>
+
+<div id="outline-container-4.1.2" class="outline-4">
+<h4 id="sec-4.1.2"><span class="section-number-4">4.1.2</span> current-source-directory &nbsp;&nbsp;&nbsp;<span class="tag"><span class="parameter">parameter</span></span></h4>
+<div class="outline-text-4" id="text-4.1.2">
+
+
+
+
+<pre class="src src-scheme">(current-source-directory)           <span style="color: #465a61; font-weight: bold;">; </span><span style="color: #465a61; font-style: italic;">get parameter value
+</span>(current-source-directory <span style="color: #a57705;">&lt;newval&gt;</span>)  <span style="color: #465a61; font-weight: bold;">; </span><span style="color: #465a61; font-style: italic;">set parameter
+</span></pre>
+
+
+
+<p>
+defaults to $PWD/sources (i.e. if run in directory foo/bar it will be 
+foo/bar/source defines the default directory where source files exists
+</p></div>
+
+</div>
+
+<div id="outline-container-4.1.3" class="outline-4">
+<h4 id="sec-4.1.3"><span class="section-number-4">4.1.3</span> current-project-name &nbsp;&nbsp;&nbsp;<span class="tag"><span class="parameter">parameter</span></span></h4>
+<div class="outline-text-4" id="text-4.1.3">
+
+
+
+
+<pre class="src src-scheme">(current-project-name)           <span style="color: #465a61; font-weight: bold;">; </span><span style="color: #465a61; font-style: italic;">get parameter value
+</span>(current-project-name <span style="color: #a57705;">&lt;newval&gt;</span>)  <span style="color: #465a61; font-weight: bold;">; </span><span style="color: #465a61; font-style: italic;">set parameter
+</span></pre>
+
+
+
+<p>
+defaults to the name of $PWD (i.e. if run in directory foo/bar it will be bar)
+defines project name. My rule of the thumb is to have a project composed by 
+multple libraries loadable as (load "~~&lt;project-name&gt;/&lt;module-name&gt;")
+</p></div>
+
+</div>
+
+<div id="outline-container-4.1.4" class="outline-4">
+<h4 id="sec-4.1.4"><span class="section-number-4">4.1.4</span> current-module-name &nbsp;&nbsp;&nbsp;<span class="tag"><span class="parameter">parameter</span></span></h4>
+<div class="outline-text-4" id="text-4.1.4">
+
+
+
+
+<pre class="src src-scheme">(current-module-name)           <span style="color: #465a61; font-weight: bold;">; </span><span style="color: #465a61; font-style: italic;">get parameter value
+</span>(current-module-name <span style="color: #a57705;">&lt;newval&gt;</span>)  <span style="color: #465a61; font-weight: bold;">; </span><span style="color: #465a61; font-style: italic;">set parameter
+</span></pre>
+
+
+
+<p>
+defaults to (current-project-name)
+can be used to build various modules that refers to the same project. 
+</p></div>
+</div>
+
+</div>
+
+<div id="outline-container-4.2" class="outline-3">
+<h3 id="sec-4.2"><span class="section-number-3">4.2</span> Tasks </h3>
+<div class="outline-text-3" id="text-4.2">
+
+
+</div>
+
+<div id="outline-container-4.2.1" class="outline-4">
+<h4 id="sec-4.2.1"><span class="section-number-4">4.2.1</span> task &nbsp;&nbsp;&nbsp;<span class="tag"><span class="macro">macro</span></span></h4>
+<div class="outline-text-4" id="text-4.2.1">
+
+
+
+
+<pre class="src src-scheme">(task (<span style="color: #a57705;">&lt;depends&gt;</span> ...) <span style="color: #a57705;">&lt;body&gt;</span> ...) 
+</pre>
+
+
+
+<p>
+creates a new task, that depends from (&lt;depends &hellip;). The body of the task
+is what can be in a lambda form
+</p></div>
+
+</div>
+
+<div id="outline-container-4.2.2" class="outline-4">
+<h4 id="sec-4.2.2"><span class="section-number-4">4.2.2</span> define-task &nbsp;&nbsp;&nbsp;<span class="tag"><span class="macro">macro</span></span></h4>
+<div class="outline-text-4" id="text-4.2.2">
+
+
+
+
+<pre class="src src-scheme">(define-task <span style="color: #a57705;">&lt;name&gt;</span> (<span style="color: #a57705;">&lt;depends&gt;</span> ...) <span style="color: #a57705;">&lt;body&gt;</span> ...)
+</pre>
+
+
+
+<p>
+shorthand for (define &lt;name&gt; (task (&lt;depends&gt; &hellip;) &lt;body&gt; &hellip;))
+</p></div>
+
+</div>
+
+<div id="outline-container-4.2.3" class="outline-4">
+<h4 id="sec-4.2.3"><span class="section-number-4">4.2.3</span> task-run &nbsp;&nbsp;&nbsp;<span class="tag"><span class="macro">macro</span></span></h4>
+<div class="outline-text-4" id="text-4.2.3">
+
+
+
+
+<pre class="src src-scheme">(task-run <span style="color: #a57705;">&lt;task&gt;</span>)
+</pre>
+
+
+
+<p>
+run the task, and the dependant tasks before if needed
+</p></div>
+</div>
+
+</div>
+
+<div id="outline-container-4.3" class="outline-3">
+<h3 id="sec-4.3"><span class="section-number-3">4.3</span> Files </h3>
+<div class="outline-text-3" id="text-4.3">
+
+
+</div>
+
+<div id="outline-container-4.3.1" class="outline-4">
+<h4 id="sec-4.3.1"><span class="section-number-4">4.3.1</span> fileset                                                        :function: &nbsp;&nbsp;&nbsp;<span class="tag"><span class="macro">macro</span></span></h4>
+<div class="outline-text-4" id="text-4.3.1">
+
+
+
+
+<pre class="src src-scheme">(fileset dir: <span style="color: #a57705;">&lt;dir&gt;</span>
+         test: <span style="color: #a57705;">&lt;test&gt;</span>
+         recur: <span style="color: #a57705;">&lt;bool&gt;</span>)
+</pre>
+
+
+
+<p>
+creates a list containing the names of the files present in directory dir.
+the optional test: keyword let's you express a test function to which the
+file name is passed, and must returns true to be part of the resulting list.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4.3.2" class="outline-4">
+<h4 id="sec-4.3.2"><span class="section-number-4">4.3.2</span> make-directory &nbsp;&nbsp;&nbsp;<span class="tag"><span class="function">function</span></span></h4>
+<div class="outline-text-4" id="text-4.3.2">
+
+
+
+
+<pre class="src src-scheme">(make-directory <span style="color: #a57705;">&lt;dir&gt;</span>)
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4.3.3" class="outline-4">
+<h4 id="sec-4.3.3"><span class="section-number-4">4.3.3</span> delete-files &nbsp;&nbsp;&nbsp;<span class="tag"><span class="function">function</span></span></h4>
+<div class="outline-text-4" id="text-4.3.3">
+
+
+
+
+<pre class="src src-scheme">(delete-files <span style="color: #a57705;">&lt;files&gt;</span>)
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4.3.4" class="outline-4">
+<h4 id="sec-4.3.4"><span class="section-number-4">4.3.4</span> copy-files &nbsp;&nbsp;&nbsp;<span class="tag"><span class="function">function</span></span></h4>
+<div class="outline-text-4" id="text-4.3.4">
+
+
+
+
+<pre class="src src-scheme">(copy-files <span style="color: #a57705;">&lt;files&gt;</span> <span style="color: #a57705;">&lt;dest&gt;</span>)
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4.3.5" class="outline-4">
+<h4 id="sec-4.3.5"><span class="section-number-4">4.3.5</span> append-files &nbsp;&nbsp;&nbsp;<span class="tag"><span class="function">function</span></span></h4>
+<div class="outline-text-4" id="text-4.3.5">
+
+
+
+
+<pre class="src src-scheme">(append-files <span style="color: #a57705;">&lt;files&gt;</span> <span style="color: #a57705;">&lt;dest&gt;</span>)
+</pre>
+
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4.4" class="outline-3">
+<h3 id="sec-4.4"><span class="section-number-3">4.4</span> Compile </h3>
+<div class="outline-text-3" id="text-4.4">
+
+
+</div>
+
+<div id="outline-container-4.4.1" class="outline-4">
+<h4 id="sec-4.4.1"><span class="section-number-4">4.4.1</span> compile-files-to-c &nbsp;&nbsp;&nbsp;<span class="tag"><span class="function">function</span></span></h4>
+<div class="outline-text-4" id="text-4.4.1">
+
+
+
+
+<pre class="src src-scheme">(compile-files-to-c files: <span style="color: #a57705;">&lt;files&gt;</span> 
+                    options: <span style="color: #a57705;">&lt;opts&gt;</span> 
+                    output: <span style="color: #a57705;">&lt;output&gt;</span> 
+                    module-name: <span style="color: #a57705;">&lt;name&gt;</span>) 
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4.4.2" class="outline-4">
+<h4 id="sec-4.4.2"><span class="section-number-4">4.4.2</span> link-files &nbsp;&nbsp;&nbsp;<span class="tag"><span class="function">function</span></span></h4>
+<div class="outline-text-4" id="text-4.4.2">
+
+
+
+
+<pre class="src src-scheme">(link-files files: <span style="color: #a57705;">&lt;files&gt;</span> 
+            base: <span style="color: #a57705;">&lt;base&gt;</span>
+            warnings?: <span style="color: #a57705;">&lt;bool&gt;</span> 
+            output: <span style="color: #a57705;">&lt;output&gt;</span> 
+            incremental: <span style="color: #a57705;">&lt;bool&gt;</span>)
+</pre>
+
+
+
+<p>
+see link-flat and link-incremental for the meaings of the keyword values
+</p></div>
+
+</div>
+
+<div id="outline-container-4.4.3" class="outline-4">
+<h4 id="sec-4.4.3"><span class="section-number-4">4.4.3</span> compile-files &nbsp;&nbsp;&nbsp;<span class="tag"><span class="function">function</span></span></h4>
+<div class="outline-text-4" id="text-4.4.3">
+
+
+
+
+<pre class="src src-scheme">(compile-files files: <span style="color: #a57705;">&lt;files&gt;</span> 
+               options: <span style="color: #a57705;">&lt;options&gt;</span> 
+               output: <span style="color: #a57705;">&lt;output&gt;</span> 
+               cc-options: <span style="color: #a57705;">&lt;string&gt;</span> 
+               ld-options-prelude: <span style="color: #a57705;">&lt;string&gt;</span> 
+               ld-options: <span style="color: #a57705;">&lt;string&gt;</span>)
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4.4.4" class="outline-4">
+<h4 id="sec-4.4.4"><span class="section-number-4">4.4.4</span> include-files &nbsp;&nbsp;&nbsp;<span class="tag"><span class="function">function</span></span></h4>
+<div class="outline-text-4" id="text-4.4.4">
+
+
+
+
+<pre class="src src-scheme">(include-files files: <span style="color: #a57705;">&lt;files&gt;</span> 
+dest: <span style="color: #a57705;">&lt;dest&gt;</span>)
+</pre>
+
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4.5" class="outline-3">
+<h3 id="sec-4.5"><span class="section-number-3">4.5</span> Example </h3>
+<div class="outline-text-3" id="text-4.5">
+
+</div>
+</div>
+</div>
+<div id="postamble">
+<p class="author"> Author: francesco bracchi
+<a href="mailto:francesco@marduk">&lt;francesco@marduk&gt;</a>
+</p>
+<p class="date"> Date: 2011-12-26 18:44:36 CET</p>
+<p class="creator">HTML generated by org-mode 6.33x in emacs 23</p>
+</div>
+</div>
+</body>
+</html>

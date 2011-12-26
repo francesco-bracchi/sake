@@ -1,0 +1,124 @@
+Sake
+Sake is a make like programming library for gambit-c users
+* Download
+  TBD
+* Install
+  TBD
+* Use
+  Usage: 
+  #+BEGIN_SRC bash
+  sake [-h] [-file <sake-file>] [initial-task]
+  #+END_SRC
+  - -h: help page
+  - -f <sake-file>: assign the sakefile to load (defaults to sakefile.scm)
+  - <initial-task> the task that have to be run (defaults to build)
+* Sakefile language
+** Parameters
+*** current-build-directory                                       :parameter:
+    #+BEGIN_SRC scheme
+    (current-build-directory)           ; get parameter value
+    (current-build-directory <newval>)  ; set parameter
+    #+END_SRC
+    defaults to $PWD/build (i.e. if run in directory foo/bar it will be 
+    foo/bar/build defines the default directory where compiled files will be 
+    put. (can be used with parameterize, see gambit-c parameters
+*** current-source-directory                                      :parameter:
+    #+BEGIN_SRC scheme
+    (current-source-directory)           ; get parameter value
+    (current-source-directory <newval>)  ; set parameter
+    #+END_SRC
+    defaults to $PWD/sources (i.e. if run in directory foo/bar it will be 
+    foo/bar/source defines the default directory where source files exists
+*** current-project-name                                          :parameter:
+    #+BEGIN_SRC scheme
+    (current-project-name)           ; get parameter value
+    (current-project-name <newval>)  ; set parameter
+    #+END_SRC
+    defaults to the name of $PWD (i.e. if run in directory foo/bar it will be bar)
+    defines project name. My rule of the thumb is to have a project composed by 
+    multple libraries loadable as (load "~~<project-name>/<module-name>")
+*** current-module-name                                           :parameter:
+    #+BEGIN_SRC scheme
+    (current-module-name)           ; get parameter value
+    (current-module-name <newval>)  ; set parameter
+    #+END_SRC
+    defaults to (current-project-name)
+    can be used to build various modules that refers to the same project. 
+** Tasks
+*** task                                                              :macro:
+    #+BEGIN_SRC scheme
+    (task (<depends> ...) <body> ...) 
+    #+END_SRC
+    creates a new task, that depends from (<depends ...). The body of the task
+    is what can be in a lambda form
+*** define-task                                                       :macro:
+    #+BEGIN_SRC scheme
+    (define-task <name> (<depends> ...) <body> ...)
+    #+END_SRC
+    shorthand for (define <name> (task (<depends> ...) <body> ...))
+*** task-run                                                          :macro:
+    #+BEGIN_SRC scheme 
+    (task-run <task>)
+    #+END_SRC
+   run the task, and the dependant tasks before if needed
+** Files
+*** fileset                                                        :function:                                                :macro:
+    #+BEGIN_SRC scheme 
+    (fileset dir: <dir>
+             test: <test>
+             recur: <bool>)
+    #+END_SRC
+    creates a list containing the names of the files present in directory dir.
+    the optional test: keyword let's you express a test function to which the
+    file name is passed, and must returns true to be part of the resulting list.
+    
+*** make-directory                                                 :function:
+    #+BEGIN_SRC scheme 
+    (make-directory <dir>)
+    #+END_SRC scheme
+*** delete-files                                                   :function:
+    #+BEGIN_SRC scheme 
+    (delete-files <files>)
+    #+END_SRC
+*** copy-files                                                     :function:
+    #+BEGIN_SRC scheme 
+    (copy-files <files> <dest>)
+    #+END_SRC
+*** append-files                                                   :function:
+    #+BEGIN_SRC scheme
+    (append-files <files> <dest>)
+    #+END_SRC
+** Compile
+*** compile-files-to-c                                             :function:
+    #+BEGIN_SRC scheme
+    (compile-files-to-c files: <files> 
+                        options: <opts> 
+                        output: <output> 
+                        module-name: <name>) 
+    #+END_SRC
+*** link-files                                                     :function:
+    #+BEGIN_SRC scheme 
+    (link-files files: <files> 
+                base: <base>
+                warnings?: <bool> 
+                output: <output> 
+                incremental: <bool>)
+    #+END_SRC
+    see link-flat and link-incremental for the meaings of the keyword values
+*** compile-files                                                  :function:
+    #+BEGIN_SRC scheme
+    (compile-files files: <files> 
+                   options: <options> 
+                   output: <output> 
+                   cc-options: <string> 
+                   ld-options-prelude: <string> 
+                   ld-options: <string>)
+    #+END_SRC
+*** include-files                                                  :function:
+    #+BEGIN_SRC scheme 
+     (include-files files: <files> 
+     dest: <dest>)
+    #+END_SRC
+** Example
+   #+BEGIN_SRC scheme 
+   #+END_SRC
