@@ -1,0 +1,149 @@
+(define (path-add-trailing-directory-separator dir)
+  (string-append (path-strip-trailing-directory-separator dir) "/"))
+
+(define (extension=? ext)
+  (ends-with? ext))
+
+(define (ends-with? end)
+  (lambda (name)
+    (and (>= (string-length name) (string-length end))
+         (string=? (substring name (- (string-length name) (string-length end)) (string-length name))
+                   end))))
+
+(define (newer-than? ext #!key
+                     (dir (current-build-directory)))
+  (lambda (name)
+    (let((name0 (string-append 
+                 dir
+                 (path-strip-extension (path-strip-directory name))
+                 ext)))
+      (or (not (file-exists? name0))
+          (>= (time->seconds (file-last-modification-time name))
+              (time->seconds (file-last-modification-time name0)))))))
+
+(define (directory? name)
+  (eq? (file-type name) 'directory))
+
+(define (regular? name)
+  (eq? (file-type name) 'regular))
+
+(define (f-and . ts)
+  (lambda (name)
+    (let f-and ((ts ts))
+      (or (null? ts)
+          (and ((car ts) name)
+               (f-and (cdr ts)))))))
+
+(define (f-or . ts)
+  (lambda (name)
+    (let f-or ((ts ts))
+      (and (pair? ts)
+           (or ((car ts) name)
+               (f-or (cdr ts)))))))
+
+(define (shift fn)
+  (lambda (t)
+    (lambda (name)
+      (fn (t name)))))
+    
+(define f-not (shift not))
+
+(define (any? name) #t)
+(define (none? name) #f)
+
+(define (fileset #!key 
+                 (dir (current-directory))
+                 (test any?)
+                 (recursive #t))
+  (reduce append '() 
+          (map (lambda (name) 
+                 (let*((f (string-append dir name))
+                       (childs (if (and recursive (directory? f)) (fileset dir: (string-append f "/") test: test recursive: recursive) '())))
+                   (if (test f) (cons f childs)
+                       childs)))
+               (directory-files dir))))
+
+(define (reduce f i l)
+  (let reduce ((i i) (l l))
+    (if (null? l) i
+        (reduce (f i (car l)) (cdr l)))))
+          
+(define (make-directory dir)
+  (let((dir0 (path-strip-trailing-directory-separator dir)))
+    (if (file-exists? dir0) #t
+        (begin
+          (make-directory (path-directory dir0))
+          (create-directory dir0)))))
+   
+(define (sake#delete-file file #!key (recursive #t) (force #t))
+  (let((file (path-expand file)))
+    (info "deleting " file)
+    (cond
+     ((not (file-exists? file)) 'ok)
+     ((directory? file)
+      (sake#delete-directory file recursive: recursive force: force))
+     (else
+      (##delete-file file)))))
+
+(define (sake#delete-directory dir #!key (recursive #t) (force #t))
+  (if force (for-each ##delete-file (fileset dir: dir recursive: #f test: regular?)))
+  (if recursive (for-each (lambda (dir) (sake#delete-file dir recursive: recursive force: force))
+                          (fileset dir: dir recursive: #f test: directory?)))
+  (if (null? (fileset dir: dir recursive: #t test: any?)) 
+      (##delete-directory dir)
+      (warn dir " is not empty")))
+  
+(define (delete-files files)
+  (for-each sake#delete-file files))
+
+(define (sake#copy-file file dest #!key (force #t))
+  (let((file (path-expand file)))
+    (info "copying " file " to " dest)
+    (cond
+     ((directory? file)
+      (sake#copy-directory file dest force: force))
+     ((and force (file-exists? dest))
+      (sake#delete-file dest))
+     ((not (file-exists? dest))
+      (##copy-file file dest))
+     (else
+      (warn dest " already exists")))))
+
+(define (sake#copy-directory file dest #!key (force #t))
+  (cond
+   ((and force (file-exists? dest))
+    (sake#delete-file dest recursive: #t force: #t)
+    (create-directory dest)
+    (for-each (lambda (fn) (sake#copy-file fn (string-append (path-strip-trailing-directory-separator dest) "/" (path-strip-directory fn))))
+              (fileset dir: file)))
+   ((not (file-exists? dest))
+    (create-directory dest)
+    (for-each (lambda (fn) (sake#copy-file fn (string-append (path-strip-trailing-directory-separator dest) "/" (path-strip-directory fn))))
+              (fileset dir: file)))
+   (else
+    (warn dest " already exists"))))
+
+(define (copy-files files dest #!key (force #t))
+  (for-each (lambda (file) 
+              (sake#copy-file file (string-append (path-strip-trailing-directory-separator dest )
+                                                  "/" 
+                                                  (path-strip-directory file))
+                              force: force))
+            files))
+
+(define (read-file file)
+  (call-with-input-file (path-expand file)
+    (lambda (in) (read-line in #f))))
+
+(define (read-files files)
+  (call-with-output-string ""
+    (lambda (out)
+      (for-each (lambda (file) (display (read-file file) out))
+                files))))
+
+(define (append-files files dest)
+  (call-with-output-file dest
+    (lambda (out)
+      (for-each (lambda (file) (display (read-file file) out))
+                files))))
+
