@@ -1,3 +1,17 @@
+#+TITLE:     sake/index.org
+#+AUTHOR:    francesco bracchi
+#+EMAIL:     frbracch@gmail.com
+#+DATE:      2011-12-26 lun
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME: 
 Sake
 Sake is a make like programming library for gambit-c users
 * Download
@@ -65,13 +79,54 @@ Sake is a make like programming library for gambit-c users
 *** fileset                                                        :function:
     #+BEGIN_SRC scheme 
     (fileset dir: <dir>
-    test: <test>
-    recur: <bool>)
+             test: <test>
+             recur: <bool>)
     #+END_SRC
     creates a list containing the names of the files present in directory dir.
     the optional test: keyword let's you express a test function to which the
     file name is passed, and must returns true to be part of the resulting list.
-    
+    ****testing functions
+    #+BEGIN_SRC scheme
+    (extension=? <ext>)
+    (ends-with? <string>)
+    (newer-than? <ext> dir: <dir>)
+    directory?
+    regular?
+    #+END_SRC
+    the test parameter can be set as a normal function like
+    #+BEGIN_SRC scheme
+    (fileset test: (lambda (name) (string=? (file-extension name) ".scm")))
+    #+END_SRC 
+    or use one of these combinators, the equivalent form is
+    #+BEGIN_SRC scheme
+    (filest test: (extension=? ".scm"))
+    #+END_SRC
+    + extension=? returns a function that returns true if the input name 
+      extension equals <ext>
+    + ends-with? returns a function that returns true if the input name
+      ends with the string <string>
+    + newer-than? returns a funtion that
+      - strip the extension from the name 
+      - if dir is specified it strips directory from the name and replaces
+        it with the supplied directory <dir>
+      - adds the extension <ext>
+      - it returns true if the built file name doesn't exist or exists but
+        is older than the original name
+      It is used mainly to select files that needs to be compiled again for
+      example defining 
+      #+BEGIN_SRC scheme
+      (filest dir: (current-source-directory) 
+              test: (newer-than? ".so" dir: (current-build-directory)))
+      #+END_SRC
+      evaluate to a list containing all files, regardless to the extension, in
+      (current-source-directory), that do not have a corresponding ".so" file
+      in (current-build-directory), or for which this file is outdated.
+****combinators
+      #+BEGIN_SRC scheme
+      (f-and <test> ...)
+      (f-or <test> ...)
+      (f-not <test>)
+      #+END_SRC
 *** make-directory                                                 :function:
     #+BEGIN_SRC scheme 
     (make-directory <dir>)
@@ -117,8 +172,35 @@ Sake is a make like programming library for gambit-c users
 *** include-files                                                  :function:
     #+BEGIN_SRC scheme 
      (include-files files: <files> 
-     dest: <dest>)
+                    dest: <dest>)
     #+END_SRC
 ** Example
    #+BEGIN_SRC scheme 
+;;; Sakefile 
+(define-task init ()
+  (make-directory (current-build-directory)))
+
+(define-task clean (init)
+  (delete-file (current-build-directory)))
+
+(define-task compile-to-c (init)
+  (compile-files-to-c))
+
+(define-task link (compile-to-c)
+  (link-files))
+
+(define-task compile (compile-to-c)
+  (compile-files))
+
+(define-task create-include (init)
+  (append-files
+   (fieldset test: (ends-with? "#.scm"))
+   dest: (string-append (current-build-directory) "/" (current-module-name) "#.scm")))
+
+(define-task install (compile create-include)
+  (copy-files 
+   files: (fieldset dir: (current-build-directory)
+                    test: (f-or (extension=? ".o")
+                                (ends-with? "#.scm")))
+   dest: (string-append "~~" (current-project-name) "/" (current-module-name))))
    #+END_SRC

@@ -1,34 +1,39 @@
-(load "~~sake/filesets")
-
 (define-task init ()
   (make-directory (current-build-directory)))
 
 (define-task clean (init)
-  (delete-files (fileset dir: (current-build-directory)))
   (delete-file (current-build-directory)))
 
-(define-task compile-to-c (init)
-  (compile-files-to-c))
+(define-task compile-lib (init)
+  (gambit-compile-files
+   files: (fileset test: (f-and (ends-with? "sakelib.scm") (newer-than? ".o1")))
+   output: (string-append (current-build-directory) "sakelib.o1")))
 
-(define-task link (compile-to-c)
-  (link-files
-   files: (list "src/common.scm"
-                "src/compile.scm"
-                "src/filesets.scm"
-                "src/tasks.scm")))
+(define-task compile-exe (init)
+  (if ((newer-than? "") (string-append (current-source-directory) "sake.scm"))
+      (gambit-compile-file
+       (string-append (current-source-directory) "sake.scm")
+       output: (string-append (current-build-directory) "sake")
+       options: "-exe")))
 
-(define-task compile (compile-to-c)
-  (compile-files)
-  (compile-files files: "build/sake.c" exe: #t))
+(define-task compile (compile-exe compile-lib)
+  '(compile all))
 
-(define-task make-include (init)
-  (append-files
-   (fieldset test: (ends-with? "#.scm"))
-   dest: (string-append (current-build-directory) "/" (current-module-name) "#.scm")))
+(define-task includes (init)
+  (copy-files (fileset dir: (current-source-directory) test: (f-and (ends-with? "#.scm") regular?))
+              (current-build-directory)))
 
-(define-task install (compile)
-  (copy-files 
-   files: (fieldset dir: (current-build-directory)
-                    test: (f-or (extension=? ".o")
-                                (ends-with? "#.scm")))
-   dest: (string-append "~~" (current-project-name) "/" (current-module-name))))
+(define-task install (compile includes)
+  (make-directory "~~sake")
+  (make-directory "~~sake/sources")
+
+  (delete-file "~~sake/sakelib.o1")
+  (delete-files (fileset dir: "~~sake/" test: (ends-with? "#.scm")))
+  (delete-file "~~/bin/sake")
+  
+  (copy-file (string-append (current-build-directory) "sakelib.o1") "~~sake/sakelib.o1")
+  (copy-files (fileset dir: (current-source-directory) test: (f-and (ends-with? "#.scm") regular?)) "~~sake/")
+  (copy-file (string-append (current-build-directory) "sake") "~~/bin/sake")
+  
+  (copy-files (fileset dir: (current-source-directory) test: (ends-with? ".scm"))
+              "~~sake/sources/"))

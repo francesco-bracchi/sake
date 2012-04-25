@@ -43,6 +43,11 @@
            (##include "~~lib/gambit#.scm")
            (##include "~~sake/sakelib#.scm")
            (include ,(string-append dir file))
-           (task-run ,task)))
-   (info "exiting directory " dir))
+	   (with-exception-catcher
+	    (lambda (ex)
+	      (if (unbound-global-exception? ex) 
+		  (err ,(string-append "task '" (symbol->string task) "' not found in " file))
+		  (raise ex)))
+	    (lambda () (task-run ,task)))))
+  (info "exiting directory " dir))
   
