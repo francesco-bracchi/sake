@@ -17,7 +17,21 @@ Sake is a make like programming library for gambit-c users
 * Download
   TBD
 * Install
-  TBD
+  1. Compile
+   #+BEGIN_SRC sh
+     gsi clean compile
+   #+END_SRC
+  2. Install
+     after having compile sake, run
+   #+BEGIN_SRC sh
+     sudo gsi install
+   #+END_SRC
+     the executable will be put in ~~/bin/sake that in many systems corresponds to
+     /usr/local/Gambit-C/current/bin/sake.
+     in order to know exactly where it is put run in gsi
+   #+BEGIN_SRC scheme 
+     (pp (path-expand "~~/bin/sake"))
+   #+END_SRC
 * Use
   Usage: 
   #+BEGIN_SRC bash
@@ -204,3 +218,4 @@ Sake is a make like programming library for gambit-c users
                                 (ends-with? "#.scm")))
    dest: (string-append "~~" (current-project-name) "/" (current-module-name))))
    #+END_SRC
+   
