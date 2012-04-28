@@ -47,3 +47,8 @@
          (dest (string-append (current-build-directory)  (current-module-name) "#.scm")))
   (append-files files dest))
 
+(define (gambit-eval
+          code-string)
+  (info "eval " code-string)
+  (shell-command
+   (string-append (gambit-compiler) " -e '" code-string "'")))
