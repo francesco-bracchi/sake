@@ -47,8 +47,58 @@
          (dest (string-append (current-build-directory)  (current-module-name) "#.scm")))
   (append-files files dest))
 
+(define (list->escaped-string l)
+  (define (flatten x:xs)
+    (let* ((result (cons '() '())) (last-elt result))
+      (define (f x:xs)
+        (cond
+         ((null? x:xs)
+          result)
+         ((pair? (car x:xs))
+          (f (car x:xs)) (f (cdr x:xs)))
+         (else
+          (set-cdr! last-elt (cons (car x:xs) '()))
+          (set! last-elt (cdr last-elt))
+          (f (cdr x:xs)))))
+      (f x:xs)
+      (cdr result)))
+  (apply
+   string-append
+   (flatten
+    (letrec ((->string
+              (lambda (a)
+                (cond
+                 ((symbol? a) (symbol->string a))
+                 ((keyword? a) (string-append (keyword->string a) ":"))
+                 ((number? a) (number->string a))
+                 ((string? a) (string-append "\"" a "\""))
+                 (else (error "list->escaped-string: string format needed" a)))))
+             (map-to-strings
+              (lambda (l #!optional front)
+                (let* ((rest
+                        (lambda ()
+                          (cons (map-to-strings (car l))
+                                (if (null? (cdr l))
+                                    (map-to-strings (cdr l))
+                                    (map-to-strings (cdr l) " ")))))
+                       (next
+                        (cond
+                         ((null? l) (list ")"))
+                         ((not (pair? l)) (->string l))
+                         ((pair? (car l))
+                          (list "(" (rest)))
+                         (else
+                          (rest)))))
+                  (if front
+                      (list front next)
+                      next)))))
+      (map-to-strings l "(")))))
+
 (define (gambit-eval
-          code-string)
-  (info "eval " code-string)
-  (shell-command
-   (string-append (gambit-compiler) " -e '" code-string "'")))
+          code)
+  (let ((code-string (if (pair? code)
+                         (list->escaped-string code)
+                         code)))
+   (info "eval " code-string)
+   (shell-command
+    (string-append (gambit-compiler) " -e '" code-string "'"))))
