@@ -94,11 +94,14 @@
                       next)))))
       (map-to-strings l "(")))))
 
-(define (gambit-eval
-          code)
-  (let ((code-string (if (pair? code)
-                         (list->escaped-string code)
-                         code)))
-   (info "eval " code-string)
-   (shell-command
-    (string-append (gambit-compiler) " -e '" code-string "'"))))
+(define (gambit-eval-here code)
+  (let ((code-string (list->escaped-string code)))
+    (info "sake eval: ")
+    (pp code)
+    (shell-command
+     (string-append (gambit-compiler) " -e '" code-string "'"))))
+
+(define (gambit-eval code-string)
+  (info "eval: " code-string)
+  (shell-command
+   (string-append (gambit-compiler) " -e '" code-string "'")))
