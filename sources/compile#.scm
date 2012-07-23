@@ -7,4 +7,7 @@
   c-compile-file
   c-compile-files
   include-files
+  gambit-eval
+  gambit-eval-here
   ))
+
