@@ -65,15 +65,7 @@
   (apply
    string-append
    (flatten
-    (letrec ((->string
-              (lambda (a)
-                (cond
-                 ((symbol? a) (symbol->string a))
-                 ((keyword? a) (string-append (keyword->string a) ":"))
-                 ((number? a) (number->string a))
-                 ((string? a) (string-append "\"" a "\""))
-                 (else (error "list->escaped-string: string format needed" a)))))
-             (map-to-strings
+    (letrec ((map-to-strings
               (lambda (l #!optional front)
                 (let* ((rest
                         (lambda ()
@@ -84,7 +76,7 @@
                        (next
                         (cond
                          ((null? l) (list ")"))
-                         ((not (pair? l)) (->string l))
+                         ((not (pair? l)) (object->string l))
                          ((pair? (car l))
                           (list "(" (rest)))
                          (else
