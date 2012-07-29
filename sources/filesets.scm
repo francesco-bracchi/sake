@@ -125,7 +125,7 @@
       (sake#copy-directory file dest force: force))
      ((and force (file-exists? dest))
       (sake#delete-file dest)
-      (sake#copy-file file dest))
+      (sake#copy-file file dest force: #f))
      ((not (file-exists? dest))
       (##copy-file file dest))
      (else
