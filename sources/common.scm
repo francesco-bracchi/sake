@@ -19,7 +19,6 @@
 (define current-module-name
   (make-parameter (current-project-name)))
 
-
 (define (log type . message)
   (display "*** ")
   (display type)
@@ -36,7 +35,6 @@
 (define (err . message)
   (apply log (cons "ERROR" message))
   (apply error (cons "sake error" message)))
-
 
 (define (sake #!key 
               (dir (current-directory))

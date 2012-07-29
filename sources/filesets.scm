@@ -119,14 +119,15 @@
 
 (define (sake#copy-file file dest #!key (force #t))
   (let ((file (path-expand file)))
-    (info "copying " file " to " dest)
     (cond
      ((directory? file)
+      (info "copying " file " to " dest)
       (sake#copy-directory file dest force: force))
      ((and force (file-exists? dest))
       (sake#delete-file dest)
       (sake#copy-file file dest force: #f))
      ((not (file-exists? dest))
+      (info "copying " file " to " dest)
       (##copy-file file dest))
      (else
       (warn dest " already exists")))))
