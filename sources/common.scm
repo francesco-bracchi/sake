@@ -1,3 +1,8 @@
+(define (reduce f i l)
+  (let reduce ((i i) (l l))
+    (if (null? l) i
+        (reduce (f i (car l)) (cdr l)))))
+
 (define current-build-directory 
   (make-parameter 
    (string-append (current-directory) "build/")))
@@ -13,7 +18,6 @@
 
 (define current-module-name
   (make-parameter (current-project-name)))
-
 
 (define (log type . message)
   (display "*** ")
@@ -31,7 +35,6 @@
 (define (err . message)
   (apply log (cons "ERROR" message))
   (apply error (cons "sake error" message)))
-
 
 (define (sake #!key 
               (dir (current-directory))
